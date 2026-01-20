@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software or model, please cite it as below."
+authors:
+- family-names: "Petrenko"
+  given-names: "Igor Sergeevich"
+  orcid: "https://orcid.org/0009-0008-1297-4087"
+title: "The Monotropic Reasoner Validation Suite"
+version: 1.0.0
+date-released: 2026-01-20
+url: "https://github.com/bricsin4u/idiot-theory-autism"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Petrenko"
+    given-names: "Igor Sergeevich"
+    orcid: "https://orcid.org/0009-0008-1297-4087"
+  doi: "10.5281/zenodo.18310317"
+  journal: "Preprint"
+  title: "The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency"
+  year: 2026
+references:
+  - type: book
+    authors:
+      - family-names: "Petrenko"
+        given-names: "Igor Sergeevich"
+    title: "The General Stupidity Theory"
+    year: 2026
+    publisher: "Rideró"
+    isbn: "978-5-0068-9917-9"
+
