@@ -27,10 +27,9 @@ By modeling the **"Masking Tax"** as a direct metabolic drain on attention contr
 ## 📁 Repository Structure
 
 ```bash
-idiot-theory-autism/
+The-Monotropic-Reasoner-research/
 ├── data/               # Empirical datasets (Big Five / OpenPsychometrics)
 ├── figures/            # High-fidelity research visualizations
-├── manuscript/         # Academic paper (Markdown & LaTeX-compatible)
 ├── src/                # Core simulation logic & analytical engines
 │   ├── Validation_Autism.py    # Monte Carlo agent-based modeling
 │   └── analyze_real_data.py    # Large-scale demographic risk projection
@@ -46,8 +45,8 @@ idiot-theory-autism/
 ### 1. Environment Setup
 Clone this repository and install the validated scientific stack:
 ```bash
-git clone https://github.com/bricsin4u/idiot-theory-autism.git
-cd idiot-theory-autism
+git clone https://github.com/bricsin4u/The-Monotropic-Reasoner-research.git
+cd The-Monotropic-Reasoner-research
 pip install -r requirements.txt
 ```
 
@@ -92,7 +91,7 @@ Petrenko, I. S. (2026). *The Monotropic Reasoner: A Cybernetic Model of Neurodiv
   year={2026},
   journal={Preprint},
   doi={10.5281/zenodo.18310317},
-  url={https://github.com/bricsin4u/idiot-theory-autism}
+  url={https://github.com/bricsin4u/The-Monotropic-Reasoner-research}
 }
 ```
 
