@@ -1,14 +1,19 @@
 
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # --- Configuration ---
-# --- Configuration ---
-DATA_PATH = '../data/extracted/BIG5/data.csv'
-OUTPUT_REPORT = '../manuscript/Real_World_Validation_Report.md'
-FIGURE_PATH = '../figures/'
+RANDOM_SEED = 42
+MELTDOWN_THRESHOLD_G = 2.0
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = REPO_ROOT / "data" / "extracted" / "BIG5" / "data.csv"
+FIGURES_DIR = REPO_ROOT / "figures"
+OUTPUT_REPORT = FIGURES_DIR / "Real_World_Validation_Report.md"
 
 print("Loading Big Five Data...")
 # Load data (handling potential delimiter issues)
@@ -46,7 +51,10 @@ print(f"Cleaned Dataset: {len(df)} participants")
 
 # --- G-Model Mapping ---
 # Constants
-I_sim = np.random.normal(1.0, 0.15, len(df)) # Simulated IQ (correlated with Openness slightly?)
+FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+
+rng = np.random.default_rng(RANDOM_SEED)
+I_sim = rng.normal(1.0, 0.15, len(df))
 I_sim = np.clip(I_sim, 0.5, 1.5)
 S_env = 0.8 # High Social Pressure Environment
 D_env = 0.8 # High Digital Noise Environment
@@ -192,6 +200,16 @@ stats = output_df.groupby('Group')['G_Score'].describe()
 print("\n--- Comparative Results ---")
 print(stats)
 
+def wilson_ci_95(successes: int, n: int) -> tuple[float, float, float]:
+    if n <= 0:
+        return 0.0, 0.0, 0.0
+    z = 1.96
+    phat = successes / n
+    denom = 1 + (z**2) / n
+    center = (phat + (z**2) / (2 * n)) / denom
+    half = (z / denom) * np.sqrt((phat * (1 - phat) / n) + (z**2) / (4 * n**2))
+    return phat, max(0.0, center - half), min(1.0, center + half)
+
 # Save Report
 
 # Old validation block removed to avoid key error
@@ -204,35 +222,42 @@ sns.set_theme(style="whitegrid")
 # Plot 3: Real World G-Score Distribution (KDE)
 plt.figure(figsize=(10, 6))
 sns.kdeplot(data=output_df, x="G_Score", hue="Group", fill=True, palette="rocket", common_norm=False)
-plt.axvline(x=2.0, color='r', linestyle='--', label='Meltdown Threshold (G=2.0)')
-plt.title("Real-World Density of Cognitive Collapse (Big Five Dataset)")
+plt.axvline(x=MELTDOWN_THRESHOLD_G, color='r', linestyle='--', label=f"Meltdown Threshold (G={MELTDOWN_THRESHOLD_G:.1f})")
+plt.title("Real-World Density of Cognitive Vulnerability (Big Five Dataset)")
 plt.xlabel("Cognitive Vulnerability (G)")
 plt.legend(title='Phenotype')
-plt.legend(title='Phenotype')
-plt.savefig(f"{FIGURE_PATH}fig3_realworld_density.png")
-print(f"Saved {FIGURE_PATH}fig3_realworld_density.png")
+plt.savefig(FIGURES_DIR / "fig3_realworld_density.png")
+print(f"Saved {FIGURES_DIR / 'fig3_realworld_density.png'}")
 
 # Plot 4: Meltdown Rates Bar Chart
-failure_rates = output_df.groupby('Group')['G_Score'].apply(lambda x: (x > 2.0).mean() * 100).reset_index()
+failure_rates = output_df.groupby('Group')['G_Score'].apply(lambda x: (x > MELTDOWN_THRESHOLD_G).mean() * 100).reset_index()
 failure_rates.columns = ['Group', 'Meltdown_Rate']
 
+meltdown_counts = output_df.groupby('Group')['G_Score'].apply(lambda x: int((x > MELTDOWN_THRESHOLD_G).sum())).to_dict()
+group_counts = output_df.groupby('Group')['G_Score'].size().to_dict()
+
+print("\n--- Meltdown Rates (Wilson 95% CI) ---")
+for group in sorted(group_counts.keys()):
+    n = int(group_counts[group])
+    k = int(meltdown_counts.get(group, 0))
+    p, lo, hi = wilson_ci_95(k, n)
+    print(f"{group}: {p*100:.1f}% [{lo*100:.1f}%, {hi*100:.1f}%] (k={k}, n={n})")
+
 plt.figure(figsize=(8, 6))
-sns.barplot(data=failure_rates, x="Group", y="Meltdown_Rate", palette="rocket")
-plt.title("Singularity Rate (% of Population in Meltdown)")
+sns.barplot(data=failure_rates, x="Group", y="Meltdown_Rate", hue="Group", palette="rocket", legend=False)
+plt.title("Theoretical Meltdown Rates (G > Threshold)")
 plt.ylabel("Percent > Critical Threshold")
 plt.ylim(0, 100)
 for index, row in failure_rates.iterrows():
     plt.text(index, row.Meltdown_Rate + 2, f"{row.Meltdown_Rate:.1f}%", color='black', ha="center")
-for index, row in failure_rates.iterrows():
-    plt.text(index, row.Meltdown_Rate + 2, f"{row.Meltdown_Rate:.1f}%", color='black', ha="center")
-plt.savefig(f"{FIGURE_PATH}fig4_meltdown_rates.png")
-print(f"Saved {FIGURE_PATH}fig4_meltdown_rates.png")
+plt.savefig(FIGURES_DIR / "fig4_meltdown_rates.png")
+print(f"Saved {FIGURES_DIR / 'fig4_meltdown_rates.png'}")
 
 # Update Summary Text for Report
 stats_nt = stats.loc['Neurotypical_High']
 stats_nd = stats.loc['Monotropic_High']
 
-with open(OUTPUT_REPORT, 'w') as f:
+with open(OUTPUT_REPORT, 'w', encoding="utf-8") as f:
     f.write("# Demographic Risk Projection Report (Big Five Dataset)\n\n")
     f.write(f"**Dataset**: Open Psychometrics Big Five (N={len(df)})\n")
     f.write(f"**Method**: Monotropism Score Quantiles (Top 20% vs Bottom 20%)\n")
@@ -240,7 +265,7 @@ with open(OUTPUT_REPORT, 'w') as f:
     f.write("## 1. Population Statistics\n")
     f.write(f"- Neurotypical (Poly) Count: {len(df[df['Group']=='Neurotypical_High'])}\n")
     f.write(f"- Monotropic (ND) Count: {len(df[df['Group']=='Monotropic_High'])}\n\n")
-    f.write("## 2. Rationality Scores (G) under Stress (D=0.8, S=0.8)\n")
+    f.write(f"## 2. Rationality Scores (G) under Stress (D={D_env}, S={S_env})\n")
     f.write(stats.to_string())
     f.write("\n\n## 3. Projected Findings\n")
     f.write(f"- The Monotropic group shows a Mean G of **{stats_nd['mean']:.2f}** vs NT **{stats_nt['mean']:.2f}**.\n")
@@ -248,8 +273,14 @@ with open(OUTPUT_REPORT, 'w') as f:
     fr_nd = failure_rates[failure_rates['Group']=='Monotropic_High']['Meltdown_Rate'].values[0]
     fr_nt = failure_rates[failure_rates['Group']=='Neurotypical_High']['Meltdown_Rate'].values[0]
     
-    f.write(f"- **Theoretical Singularity Rate (Risk > 2.0)**:\n")
-    f.write(f"  - ND: {fr_nd:.1f}%\n")
-    f.write(f"  - NT: {fr_nt:.1f}%\n")
+    nd_n = int(group_counts.get('Monotropic_High', 0))
+    nt_n = int(group_counts.get('Neurotypical_High', 0))
+    nd_k = int(meltdown_counts.get('Monotropic_High', 0))
+    nt_k = int(meltdown_counts.get('Neurotypical_High', 0))
+    nd_p, nd_lo, nd_hi = wilson_ci_95(nd_k, nd_n)
+    nt_p, nt_lo, nt_hi = wilson_ci_95(nt_k, nt_n)
+    f.write(f"- **Theoretical Meltdown Rate (Risk > {MELTDOWN_THRESHOLD_G:.1f})**:\n")
+    f.write(f"  - ND: {fr_nd:.1f}% (95% CI {nd_lo*100:.1f}% to {nd_hi*100:.1f}%; k={nd_k}, n={nd_n})\n")
+    f.write(f"  - NT: {fr_nt:.1f}% (95% CI {nt_lo*100:.1f}% to {nt_hi*100:.1f}%; k={nt_k}, n={nt_n})\n")
 
 print(f"Report saved to {OUTPUT_REPORT}")

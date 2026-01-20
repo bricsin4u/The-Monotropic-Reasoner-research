@@ -16,7 +16,7 @@ preferred-citation:
     orcid: "https://orcid.org/0009-0008-1297-4087"
   doi: "10.5281/zenodo.18310317"
   journal: "Preprint"
-  title: "The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency"
+  title: "The Monotropic Reasoner: A Formal Model of Neurodivergent Cognitive Efficiency"
   year: 2026
 references:
   - type: book

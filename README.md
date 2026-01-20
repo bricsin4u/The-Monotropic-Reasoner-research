@@ -1,4 +1,4 @@
-# The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency
+# The Monotropic Reasoner: A Formal Model of Neurodivergent Cognitive Efficiency
 ## Official Research Repository & Validation Suite
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18310317.svg)](https://doi.org/10.5281/zenodo.18310317)
@@ -7,7 +7,7 @@
 
 > **"Rationality is not a peak of intelligence, but a state of cognitive architecture."**
 
-This repository contains the mathematical models, simulation software, and empirical validation datasets for the research paper: **"The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency"** by Igor S. Petrenko (2026).
+This repository contains the mathematical models, simulation software, and empirical validation datasets for the research paper: **"The Monotropic Reasoner: A Formal Model of Neurodivergent Cognitive Efficiency"** by Igor S. Petrenko (2026).
 
 ---
 
@@ -72,7 +72,7 @@ python src/analyze_real_data.py
 | :--- | :--- | :--- | :--- |
 | **Rationality Score (Low Noise)** | 0.541 | 0.633 | **+14.6% Efficiency** |
 | **Attention Depletion (High Stress)** | ~40% | ~5% | **8x Resource Loss** |
-| **Singularity Rate ($G > 2.0$)** | **91.4%** | 2.9% | **Critical Vulnerability** |
+| **Meltdown Rate ($G > 2.0$)** | **91.4%** | 2.9% | **Critical Vulnerability** |
 
 ---
 

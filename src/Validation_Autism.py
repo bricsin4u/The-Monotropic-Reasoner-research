@@ -1,4 +1,6 @@
 
+from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -7,6 +9,10 @@ import seaborn as sns
 # --- Configuration ---
 N_AGENTS = 5000
 RANDOM_SEED = 42
+MELTDOWN_THRESHOLD_G = 2.0
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+FIGURES_DIR = REPO_ROOT / "figures"
 
 # --- G-Model Functions (Adapted for Neurodivergence) ---
 
@@ -60,6 +66,7 @@ def calculate_g(I, A, D, S, B_err, B_mot_base, C, E, agent_type):
 
 # --- Simulation ---
 np.random.seed(RANDOM_SEED)
+FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
 results = []
 
@@ -116,10 +123,20 @@ df = pd.DataFrame(results)
 
 # --- Analysis & Stats ---
 
+def mean_ci_95(values: pd.Series) -> tuple[float, float, float]:
+    clean = values.dropna().to_numpy()
+    n = clean.size
+    mean = float(clean.mean())
+    if n < 2:
+        return mean, mean, mean
+    se = float(clean.std(ddof=1) / np.sqrt(n))
+    half_width = 1.96 * se
+    return mean, mean - half_width, mean + half_width
+
 # 1. Performance in Low Noise (The Savant Zone)
 low_noise = df[df['Environment_Noise'] < 0.3]
-g_low_nt = low_noise[low_noise['Type'] == 'Neurotypical']['G'].mean()
-g_low_nd = low_noise[low_noise['Type'] == 'Autistic']['G'].mean()
+g_low_nt, g_low_nt_lo, g_low_nt_hi = mean_ci_95(low_noise[low_noise['Type'] == 'Neurotypical']['G'])
+g_low_nd, g_low_nd_lo, g_low_nd_hi = mean_ci_95(low_noise[low_noise['Type'] == 'Autistic']['G'])
 
 # 2. Performance in High Noise (The Burnout Zone)
 high_noise = df[df['Environment_Noise'] > 0.7]
@@ -136,6 +153,8 @@ print("--- SIMULATION RESULTS ---")
 print(f"Low Noise (D<0.3) G-Score (Lower is better):")
 print(f"  NT: {g_low_nt:.3f}")
 print(f"  ND: {g_low_nd:.3f} -> ND is {((g_low_nt - g_low_nd)/g_low_nt)*100:.1f}% MORE rational.")
+print(f"  NT 95% CI: [{g_low_nt_lo:.3f}, {g_low_nt_hi:.3f}]")
+print(f"  ND 95% CI: [{g_low_nd_lo:.3f}, {g_low_nd_hi:.3f}]")
 print("\nHigh Noise (D>0.7) G-Score:")
 print(f"  NT: {g_high_nt:.3f}")
 print(f"  ND: {g_high_nd:.3f} -> ND is {((g_high_nd - g_high_nt)/g_high_nt)*100:.1f}% LESS rational (Meltdown).")
@@ -149,27 +168,25 @@ sns.set_theme(style="whitegrid")
 
 # Plot 1: G-Score Distribution (Violin Plot)
 plt.figure(figsize=(10, 6))
-sns.violinplot(data=df, x="Type", y="G", hue="Type", palette="muted", split=True)
+sns.violinplot(data=df, x="Type", y="G")
 plt.title("Distribution of Cognitive Vulnerability (G) by Neurotype")
-plt.ylabel("Stupidity Index (G)")
-plt.axhline(y=1.0, color='r', linestyle='--', label='Critical Threshold (G=1.0)')
+plt.ylabel("Cognitive Vulnerability (G)")
+plt.axhline(y=MELTDOWN_THRESHOLD_G, color="r", linestyle="--", label=f"Meltdown Threshold (G={MELTDOWN_THRESHOLD_G:.1f})")
 plt.legend()
-plt.legend()
-plt.savefig("../figures/fig1_synthetic_g_distribution.png")
-print("Saved ../figures/fig1_synthetic_g_distribution.png")
+plt.savefig(FIGURES_DIR / "fig1_synthetic_g_distribution.png")
+print(f"Saved {FIGURES_DIR / 'fig1_synthetic_g_distribution.png'}")
 
 # Plot 2: Interaction of Noise and Rationality (Scatter with Fit)
 plt.figure(figsize=(10, 6))
 # Subsample for cleaner scatter plot
-sample_df = df.sample(1000)
+sample_df = df.sample(1000, random_state=RANDOM_SEED)
 sns.scatterplot(data=sample_df, x="Environment_Noise", y="G", hue="Type", alpha=0.5, palette="muted")
 sns.regplot(data=sample_df[sample_df['Type']=='Neurotypical'], x="Environment_Noise", y="G", scatter=False, color='b', label='NT Trend')
 sns.regplot(data=sample_df[sample_df['Type']=='Autistic'], x="Environment_Noise", y="G", scatter=False, color='orange', label='ND Trend')
-plt.title("Impact of Environmental Noise on Rationality")
-plt.xlabel("Digital Noise (D)")
-plt.ylabel("Stupidity Index (G)")
+plt.title("Impact of Environmental Load on Cognitive Vulnerability")
+plt.xlabel("Environmental Load (D)")
+plt.ylabel("Cognitive Vulnerability (G)")
 plt.legend()
-plt.legend()
-plt.savefig("../figures/fig2_noise_impact.png")
-print("Saved ../figures/fig2_noise_impact.png")
+plt.savefig(FIGURES_DIR / "fig2_noise_impact.png")
+print(f"Saved {FIGURES_DIR / 'fig2_noise_impact.png'}")
 
