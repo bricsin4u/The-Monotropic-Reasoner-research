@@ -1,58 +1,105 @@
-# The Monotropic Reasoner: Research Repository
+# The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency
+## Official Research Repository & Validation Suite
 
-This repository contains the dataset, simulation code, and validation results for the paper **"The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency"** by Igor S. Petrenko (2026).
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18310317.svg)](https://doi.org/10.5281/zenodo.18310317)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-## 1. Project Structure
+> **"Rationality is not a peak of intelligence, but a state of cognitive architecture."**
 
-The project is organized as follows:
+This repository contains the mathematical models, simulation software, and empirical validation datasets for the research paper: **"The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency"** by Igor S. Petrenko (2026).
 
-*   `manuscript/`: Contains the full academic paper (`Autism_Cognitive_Model.md`) and the risk projection report.
-*   `src/`: Python source code for simulations and data analysis.
-    *   `Validation_Autism.py`: Monte Carlo simulation script.
-    *   `analyze_real_data.py`: Big Five dataset analysis script.
-*   `data/`: Contains the raw and processed datasets.
-*   `figures/`: Generated charts and visualizations used in the paper.
+---
 
-## 2. Experimental Results
+## 🔬 Research Overview
 
-The research produced four key figures (located in `figures/`):
+Traditional psychiatric models (DSM-5) view Autism Spectrum Condition (ASC) through a lens of deficit. This research applies the **General Theory of Stupidity ($G$)** to re-parameterize neurodivergence as a fundamental architectural trade-off between **Robustness** (Neurotypical) and **Precision** (Monotropic).
 
-*   **Figure 1**: Rationality (G) distribution (Synthetic NT vs ND).
-*   **Figure 2**: The "Meltdown Phase Transition" (Noise Impact).
-*   **Figure 3**: Real-world G-score density estimation.
-*   **Figure 4**: Theoretical Meltdown Rate comparison (90.1% vs 2.9%).
+By modeling the **"Masking Tax"** as a direct metabolic drain on attention control ($A$), we formally demonstrate why "Autistic Burnout" is a deterministic system failure (a Phase Transition) rather than an emotional dysfunction.
 
-## 3. Replication Guide
+### Key Theoretical Contributions
+*   **Monotropic Gain Function**: Formalization of the "Attention Tunnel" as a High-Gain/Narrow-Bandwidth filter.
+*   **The Emulation Coefficient ($\alpha$)**: Quantification of the cognitive cost required to run social "software emulation" on neurodivergent hardware.
+*   **The Stupidity Singularity**: Identification of the environmental noise threshold ($D_{thresh}$) where high-functioning agents undergo cognitive collapse.
 
-To replicate the findings:
+---
 
-1.  **Install Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## 📁 Repository Structure
 
-2.  **Run Synthetic Simulation**:
-    ```bash
-    cd src
-    python Validation_Autism.py
-    # Figures 1 & 2 will be saved to ../figures/
-    ```
+```bash
+idiot-theory-autism/
+├── data/               # Empirical datasets (Big Five / OpenPsychometrics)
+├── figures/            # High-fidelity research visualizations
+├── manuscript/         # Academic paper (Markdown & LaTeX-compatible)
+├── src/                # Core simulation logic & analytical engines
+│   ├── Validation_Autism.py    # Monte Carlo agent-based modeling
+│   └── analyze_real_data.py    # Large-scale demographic risk projection
+├── CITATION.cff        # Academic metadata for BibTeX/RefWorks
+├── LICENSE             # MIT License
+└── requirements.txt    # Science stack dependencies
+```
 
-3.  **Run Real-World Analysis**:
-    ```bash
-    cd src
-    python analyze_real_data.py
-    # Figures 3 & 4 will be saved to ../figures/
-    ```
+---
 
-## 4. Citation
+## 🚀 Replication & Validation Suite
 
-Please cite this work using the metadata in `CITATION.cff` or:
+### 1. Environment Setup
+Clone this repository and install the validated scientific stack:
+```bash
+git clone https://github.com/bricsin4u/idiot-theory-autism.git
+cd idiot-theory-autism
+pip install -r requirements.txt
+```
 
-> **Petrenko, I. S.** (2026). *The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency*. [Preprint].
+### 2. Monte Carlo Simulation (Synthetic Proof)
+Run the agent-based simulation to visualize the $14.6\%$ "Savant Advantage" in low-entropy environments versus the exponential collapse in high-noise environments.
+```bash
+python src/Validation_Autism.py
+```
+*Outputs: `figures/fig1_synthetic_g_distribution.png`, `figures/fig2_noise_impact.png`*
 
-## 5. Data Source
+### 3. Large-Scale Demographic Analysis (N=19,718)
+Project the model onto a population-scale dataset from the Open-Source Psychometrics Project to analyze real-world risk densities.
+```bash
+python src/analyze_real_data.py
+```
+*Outputs: `figures/fig3_realworld_density.png`, `figures/fig4_meltdown_rates.png`*
 
-The real-world data used in this study is sourced from:
-**Open-Source Psychometrics Project (2012)**. *Big Five Personality Test Data*. Retrieves from [https://openpsychometrics.org/_rawdata/](https://openpsychometrics.org/_rawdata/).
+---
 
+## 📊 Core Findings
+
+| Metric | Monotropic (ND) | Polytropic (NT) | Delta |
+| :--- | :--- | :--- | :--- |
+| **Rationality Score (Low Noise)** | 0.541 | 0.633 | **+14.6% Efficiency** |
+| **Attention Depletion (High Stress)** | ~40% | ~5% | **8x Resource Loss** |
+| **Singularity Rate ($G > 2.0$)** | **91.4%** | 2.9% | **Critical Vulnerability** |
+
+---
+
+## ✍️ Citation & Academic Attribution
+
+If you use this model or the simulation data in your research, please cite as follows:
+
+**APA 7th Edition:**
+Petrenko, I. S. (2026). *The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency*. Preprint. doi:10.5281/zenodo.18310317
+
+**BibTeX:**
+```bibtex
+@article{petrenko2026monotropic,
+  title={The Monotropic Reasoner: A Cybernetic Model of Neurodivergent Cognitive Efficiency},
+  author={Petrenko, Igor S.},
+  year={2026},
+  journal={Preprint},
+  doi={10.5281/zenodo.18310317},
+  url={https://github.com/bricsin4u/idiot-theory-autism}
+}
+```
+
+---
+
+## 🤝 Acknowledgments
+Special thanks to **Lady Cali de Cadenet** (Researcher, Educator, Therapist) for her expert consultation on autistic cognitive perception and the phenomenological refinement of the Emulation Coefficient.
+
+---
+© 2026 Igor S. Petrenko | Part of the [General Stupidity Theory](https://www.amazon.com/dp/B0GGR9BZF4) Research Initiative.
