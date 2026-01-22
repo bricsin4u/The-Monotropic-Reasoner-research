@@ -96,9 +96,5 @@ Petrenko, I. S. (2026). *The Monotropic Reasoner: A Cybernetic Model of Neurodiv
 ```
 
 ---
-
-## 🤝 Acknowledgments
-Special thanks to **Lady Cali de Cadenet** (Researcher, Educator, Therapist) for her expert consultation on autistic cognitive perception and the phenomenological refinement of the Emulation Coefficient.
-
----
 © 2026 Igor S. Petrenko | Part of the [General Stupidity Theory](https://www.amazon.com/dp/B0GGR9BZF4) Research Initiative.
+
